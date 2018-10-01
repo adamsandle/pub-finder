@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import Radar from "./components/radar";
 import logo from "./logo.svg";
 import "./App.css";
 
@@ -49,6 +50,7 @@ class App extends Component {
             {x.name + " " + x.distance + "m " + x.bearing.toFixed(0) + "degs"}
           </p>
         ))}
+        <Radar locations={this.props.locations} />
       </div>
     );
   }
