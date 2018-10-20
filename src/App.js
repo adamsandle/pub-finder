@@ -4,7 +4,7 @@ import Radar from "./components/radar";
 import Header from "./components/header";
 import "./App.css";
 
-import { updatePosition, fetchLocations } from "./actions/actions";
+import { updatePosition, fetchLocations, updateHeading } from "./actions/actions";
 
 class App extends Component {
   componentDidMount() {
@@ -18,6 +18,16 @@ class App extends Component {
       error => this.setState({ error: error.message }),
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
     );
+    if ('ondeviceorientationabsolute' in window) {
+      window.addEventListener('deviceorientationabsolute', eventData => {
+        this.props.updateHeading(eventData.alpha)
+      })
+
+    } else if ('ondeviceorientation' in window) {
+      window.addEventListener('ondeviceorientation', eventData => {
+        this.props.updateHeading(eventData.alpha)
+      })
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -42,6 +52,7 @@ class App extends Component {
         <pre>{JSON.stringify(this.props.fetching)}</pre>
         <pre>{JSON.stringify(this.props.fetchedDistance)}</pre>
         <pre>{JSON.stringify(this.props.position)}</pre>
+        <pre>{JSON.stringify(this.props.heading)}</pre>
         {this.props.locations.slice(0, 10).map((x, i) => (
           <p key={i}>
             {x.name + " " + x.distance + "m " + x.bearing.toFixed(0) + "degs"}
@@ -57,12 +68,14 @@ const mapStateToProps = state => ({
   position: state.reducer.position,
   locations: state.reducer.locations,
   fetchedDistance: state.reducer.fetchedDistance,
-  fetching: state.reducer.fetching
+  fetching: state.reducer.fetching,
+  heading: state.reducer.heading
 });
 
 const mapDispatchToProps = dispatch => ({
   updatePosition: position => dispatch(updatePosition(position)),
-  fetchLocations: position => dispatch(fetchLocations(position))
+  fetchLocations: position => dispatch(fetchLocations(position)),
+  updateHeading: heading => dispatch(updateHeading(heading))
 });
 
 export default connect(

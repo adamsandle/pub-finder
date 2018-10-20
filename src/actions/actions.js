@@ -45,3 +45,10 @@ export const fetchLocations = position => dispatch => {
       });
     });
 };
+
+export const updateHeading = heading => dispatch => {
+  dispatch({
+    type: "UPDATE_HEADING",
+    payload: heading
+  });
+};

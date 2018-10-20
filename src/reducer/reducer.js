@@ -11,7 +11,8 @@ const initialSate = {
     latitude: 0,
     longitude: 0
   },
-  fetchedDistance: 0
+  fetchedDistance: 0,
+  heading: 0
 };
 
 export default (state = initialSate, action) => {
@@ -20,7 +21,7 @@ export default (state = initialSate, action) => {
       return {
         ...state,
         position: action.payload,
-        locations: calculateDistance(state.locations, action.payload),
+        locations: calculateDistance(state.locations, action.payload, state.heading),
         fetchedDistance:
           state.fetchedPosition.latitude !== 0 &&
           state.fetchedPosition.longitude !== 0
@@ -52,15 +53,22 @@ export default (state = initialSate, action) => {
               lon: x.center ? x.center.lon : x.lon
             };
           }),
-          state.position
+          state.position, state.heading
         )
+      };
+      case "UPDATE_HEADING":
+      return {
+        ...state,
+        heading: action.payload,
+        locations: calculateDistance(state.locations, state.position, action.payload),
+
       };
     default:
       return state;
   }
 };
 
-const calculateDistance = (items, position) => {
+const calculateDistance = (items, position, heading) => {
   return items
     .map(x => {
       return {
@@ -72,7 +80,7 @@ const calculateDistance = (items, position) => {
         bearing: geolib.getBearing(position, {
           latitude: x.lat,
           longitude: x.lon
-        })
+        }) + heading
       };
     })
     .sort((a, b) => {
