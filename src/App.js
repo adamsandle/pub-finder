@@ -1,10 +1,14 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import Radar from "./components/radar";
 import Header from "./components/header";
+import Map from "./components/map";
 import "./App.css";
 
-import { updatePosition, fetchLocations, updateHeading } from "./actions/actions";
+import {
+  updatePosition,
+  fetchLocations,
+  updateHeading
+} from "./actions/actions";
 
 class App extends Component {
   componentDidMount() {
@@ -18,15 +22,14 @@ class App extends Component {
       error => this.setState({ error: error.message }),
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
     );
-    if ('ondeviceorientationabsolute' in window) {
-      window.addEventListener('deviceorientationabsolute', eventData => {
-        this.props.updateHeading(eventData.alpha)
-      })
-
-    } else if ('ondeviceorientation' in window) {
-      window.addEventListener('ondeviceorientation', eventData => {
-        this.props.updateHeading(eventData.alpha)
-      })
+    if ("ondeviceorientationabsolute" in window) {
+      window.addEventListener("deviceorientationabsolute", eventData => {
+        this.props.updateHeading(eventData.alpha);
+      });
+    } else if ("ondeviceorientation" in window) {
+      window.addEventListener("ondeviceorientation", eventData => {
+        this.props.updateHeading(eventData.alpha);
+      });
     }
   }
 
@@ -58,7 +61,7 @@ class App extends Component {
             {x.name + " " + x.distance + "m " + x.bearing.toFixed(0) + "degs"}
           </p>
         ))}
-        <Radar locations={this.props.locations} />
+        <Map locations={this.props.locations} />
       </div>
     );
   }
