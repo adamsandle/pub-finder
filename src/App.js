@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import Header from "./components/header";
 import Map from "./components/map";
+import DebugInfo from "./components/debugInfo";
 import "./App.css";
 
 import {
@@ -49,18 +50,7 @@ class App extends Component {
     return (
       <div className="App">
         <Header />
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-        <pre>{JSON.stringify(this.props.fetching)}</pre>
-        <pre>{JSON.stringify(this.props.fetchedDistance)}</pre>
-        <pre>{JSON.stringify(this.props.position)}</pre>
-        <pre>{JSON.stringify(this.props.heading)}</pre>
-        {this.props.locations.slice(0, 10).map((x, i) => (
-          <p key={i}>
-            {x.name + " " + x.distance + "m " + x.bearing.toFixed(0) + "degs"}
-          </p>
-        ))}
+        <DebugInfo data={this.props} />
         <Map locations={this.props.locations} />
       </div>
     );
