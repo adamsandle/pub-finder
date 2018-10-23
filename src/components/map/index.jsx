@@ -10,7 +10,13 @@ class Map extends Component {
       window.innerWidth > window.innerHeight
         ? window.innerHeight
         : window.innerWidth;
-    const locations = this.props.locations.slice(0, 10);
+    const locations = this.props.selectedLocation
+      ? [
+          this.props.locations.find(item => {
+            return item.id == this.props.selectedLocation;
+          })
+        ]
+      : this.props.locations.slice(0, 10);
     const furthest = locations.length > 0 ? locations.reverse()[0].distance : 0;
     const multiplier = size / 2 / (furthest + 10);
     const items = locations.map(item => {
@@ -32,9 +38,11 @@ class Map extends Component {
             return (
               <LocationMarker
                 key={item.id}
+                id={item.id}
                 x={item.x}
                 y={item.y}
                 label={item.label}
+                onClick={this.props.onMarkerClick}
               />
             );
           })}

@@ -8,7 +8,8 @@ import "./App.css";
 import {
   updatePosition,
   fetchLocations,
-  updateHeading
+  updateHeading,
+  markerClicked
 } from "./actions/actions";
 
 class App extends Component {
@@ -46,12 +47,20 @@ class App extends Component {
     }
   }
 
+  markerClicked = locationId => {
+    this.props.markerClicked(locationId);
+  };
+
   render() {
     return (
       <div className="App">
         <Header />
         <DebugInfo data={this.props} />
-        <Map locations={this.props.locations} />
+        <Map
+          locations={this.props.locations}
+          selectedLocation={this.props.selectedLocation}
+          onMarkerClick={this.markerClicked}
+        />
       </div>
     );
   }
@@ -62,13 +71,15 @@ const mapStateToProps = state => ({
   locations: state.reducer.locations,
   fetchedDistance: state.reducer.fetchedDistance,
   fetching: state.reducer.fetching,
-  heading: state.reducer.heading
+  heading: state.reducer.heading,
+  selectedLocation: state.reducer.selectedLocation
 });
 
 const mapDispatchToProps = dispatch => ({
   updatePosition: position => dispatch(updatePosition(position)),
   fetchLocations: position => dispatch(fetchLocations(position)),
-  updateHeading: heading => dispatch(updateHeading(heading))
+  updateHeading: heading => dispatch(updateHeading(heading)),
+  markerClicked: locationId => dispatch(markerClicked(locationId))
 });
 
 export default connect(

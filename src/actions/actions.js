@@ -52,3 +52,10 @@ export const updateHeading = heading => dispatch => {
     payload: heading
   });
 };
+
+export const markerClicked = locationId => dispatch => {
+  dispatch({
+    type: "MARKER_CLICKED",
+    payload: locationId
+  });
+};

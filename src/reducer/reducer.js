@@ -79,6 +79,11 @@ export default (state = initialSate, action) => {
           };
         })
       };
+    case "MARKER_CLICKED":
+      return {
+        ...state,
+        selectedLocation: action.payload
+      };
     default:
       return state;
   }
