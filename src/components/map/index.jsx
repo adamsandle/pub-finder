@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Stage, Layer, Circle } from "react-konva";
 import { toRadians } from "../../helpers";
 import LocationMarker from "./locationMarker";
+import Rings from "./rings";
 
 class Map extends Component {
   render() {
@@ -11,7 +12,7 @@ class Map extends Component {
         : window.innerWidth;
     const locations = this.props.locations.slice(0, 10);
     const furthest = locations.length > 0 ? locations.reverse()[0].distance : 0;
-    const multiplier = size / 2 / (furthest + 100);
+    const multiplier = size / 2 / (furthest + 10);
     const items = locations.map(item => {
       return {
         id: item.id,
@@ -26,6 +27,7 @@ class Map extends Component {
       <Stage width={size} height={size}>
         <Layer offsetX={-(size / 2)} offsetY={-(size / 2)}>
           <Circle x={0} y={0} width={10} height={10} fill={"black"} />
+          <Rings distance={furthest} scale={multiplier} stageSize={size} />
           {items.map(item => {
             return (
               <LocationMarker
