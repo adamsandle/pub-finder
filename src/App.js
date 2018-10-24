@@ -39,10 +39,7 @@ class App extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (
-      (((this.props.position.latitude !== nextProps.position.latitude ||
-        this.props.position.longitude !== nextProps.position.longitude) &&
-        nextProps.locations.length === 0) ||
-        this.props.fetchedDistance >= 50) &&
+      (nextProps.fetchedDistance >= 50 || nextProps.locations.length === 0) &&
       !nextProps.fetching
     ) {
       this.props.fetchLocations(nextProps.position);

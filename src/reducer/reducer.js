@@ -66,6 +66,7 @@ export default (state = initialSate, action) => {
         ...state,
         fetchedPosition: action.fetchedPosition,
         fetching: false,
+        fetchedDistance: 0,
         locations: calculateDistance(locations, state.position, state.heading)
       };
     case "UPDATE_HEADING":
