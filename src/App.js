@@ -6,6 +6,7 @@ import DebugInfo from "./components/debugInfo";
 import "./App.css";
 
 import {
+  init,
   updatePosition,
   fetchLocations,
   updateHeading,
@@ -14,6 +15,7 @@ import {
 
 class App extends Component {
   componentDidMount() {
+    this.props.init();
     navigator.geolocation.watchPosition(
       position => {
         this.props.updatePosition({
@@ -76,6 +78,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  init: () => dispatch(init()),
   updatePosition: position => dispatch(updatePosition(position)),
   fetchLocations: position => dispatch(fetchLocations(position)),
   updateHeading: heading => dispatch(updateHeading(heading)),

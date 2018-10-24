@@ -1,5 +1,11 @@
 import axios from "axios";
 
+export const init = () => dispatch => {
+  dispatch({
+    type: "APP_INIT"
+  });
+};
+
 export const updatePosition = position => dispatch => {
   dispatch({
     type: "UPDATE_POSITION",

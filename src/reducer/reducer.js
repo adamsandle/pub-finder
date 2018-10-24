@@ -17,6 +17,11 @@ const initialSate = {
 
 export default (state = initialSate, action) => {
   switch (action.type) {
+    case "APP_INIT":
+      return {
+        ...state,
+        fetching: false
+      };
     case "UPDATE_POSITION":
       return {
         ...state,
