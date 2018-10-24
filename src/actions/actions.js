@@ -65,3 +65,10 @@ export const markerClicked = locationId => dispatch => {
     payload: locationId
   });
 };
+
+export const favourite = locationId => dispatch => {
+  dispatch({
+    type: "FAVOURITE",
+    payload: locationId
+  });
+};

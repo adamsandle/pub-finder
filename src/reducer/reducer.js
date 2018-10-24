@@ -92,6 +92,15 @@ export default (state = initialSate, action) => {
         ...state,
         selectedLocation: action.payload
       };
+    case "FAVOURITE":
+      const locations2 = [...state.locations];
+      locations2.find(
+        x => x.id === action.payload
+      ).favourite = !locations2.find(x => x.id === action.payload).favourite;
+      return {
+        ...state,
+        locations: locations2
+      };
     default:
       return state;
   }

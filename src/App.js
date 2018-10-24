@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import Header from "./components/header";
 import Map from "./components/map";
 import DebugInfo from "./components/debugInfo";
+import FavouritesModal from "./components/favouritesModal";
+import { Button, Icon } from "semantic-ui-react";
 import "./App.css";
 
 import {
@@ -10,10 +12,12 @@ import {
   updatePosition,
   fetchLocations,
   updateHeading,
-  markerClicked
+  markerClicked,
+  favourite
 } from "./actions/actions";
 
 class App extends Component {
+  state = { favouritesModalOpen: false };
   componentDidMount() {
     this.props.init();
     navigator.geolocation.watchPosition(
@@ -55,10 +59,54 @@ class App extends Component {
       <div className="App">
         <Header />
         <DebugInfo data={this.props} />
+        {this.props.selectedLocation && (
+          <Button color="red" onClick={() => this.props.markerClicked(null)}>
+            <Icon name="checkmark" /> End Navigation
+          </Button>
+        )}
+        {this.props.selectedLocation && (
+          <Button
+            color="blue"
+            onClick={() => this.props.favourite(this.props.selectedLocation)}
+          >
+            <Icon name="checkmark" />{" "}
+            {this.props.locations.find(x => x.id == this.props.selectedLocation)
+              .favourite
+              ? "Remove "
+              : "Add "}
+            Favourite
+          </Button>
+        )}
+        <Button
+          color="green"
+          onClick={() =>
+            this.setState({
+              favouritesModalOpen: !this.state.favouritesModalOpen
+            })
+          }
+        >
+          <Icon name="checkmark" /> View Favourites
+        </Button>
         <Map
           locations={this.props.locations}
           selectedLocation={this.props.selectedLocation}
           onMarkerClick={this.markerClicked}
+        />
+        <FavouritesModal
+          open={this.state.favouritesModalOpen}
+          handleClose={() =>
+            this.setState({
+              favouritesModalOpen: false
+            })
+          }
+          locations={this.props.locations.filter(x => x.favourite)}
+          onSelect={locationId => {
+            this.props.markerClicked(locationId);
+            this.setState({
+              favouritesModalOpen: false
+            });
+          }}
+          onRemove={locationId => this.props.favourite(locationId)}
         />
       </div>
     );
@@ -79,7 +127,8 @@ const mapDispatchToProps = dispatch => ({
   updatePosition: position => dispatch(updatePosition(position)),
   fetchLocations: position => dispatch(fetchLocations(position)),
   updateHeading: heading => dispatch(updateHeading(heading)),
-  markerClicked: locationId => dispatch(markerClicked(locationId))
+  markerClicked: locationId => dispatch(markerClicked(locationId)),
+  favourite: locationId => dispatch(favourite(locationId))
 });
 
 export default connect(

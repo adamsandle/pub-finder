@@ -3,8 +3,17 @@ import { Circle, Text, Group } from "react-konva";
 
 export default props => {
   return (
-    <Group onClick={() => props.onClick(props.id)}>
-      <Circle x={props.x} y={-props.y} width={10} height={10} fill={"green"} />
+    <Group
+      onClick={() => props.onClick(props.id)}
+      onTap={() => props.onClick(props.id)}
+    >
+      <Circle
+        x={props.x}
+        y={-props.y}
+        width={10}
+        height={10}
+        fill={props.favourite ? "red" : "green"}
+      />
       <Text x={props.x} y={-props.y + 5} text={props.label} />
     </Group>
   );

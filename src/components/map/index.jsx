@@ -13,16 +13,16 @@ class Map extends Component {
     const locations = this.props.selectedLocation
       ? [
           this.props.locations.find(item => {
-            return item.id == this.props.selectedLocation;
+            return item.id === this.props.selectedLocation;
           })
         ]
       : this.props.locations.slice(0, 10);
-    const furthest = locations.length > 0 ? locations.reverse()[0].distance : 0;
+    let furthest = locations.length > 0 ? locations.reverse()[0].distance : 0;
+    furthest = furthest > 250 ? furthest : 250;
     const multiplier = size / 2 / (furthest + 10);
     const items = locations.map(item => {
       return {
-        id: item.id,
-        distance: item.distance,
+        ...item,
         x: item.distance * Math.sin(toRadians(item.bearing)) * multiplier,
         y: item.distance * Math.cos(toRadians(item.bearing)) * multiplier,
         label: item.name + " - " + item.distance + "m"
@@ -42,6 +42,7 @@ class Map extends Component {
                 x={item.x}
                 y={item.y}
                 label={item.label}
+                favourite={item.favourite === true}
                 onClick={this.props.onMarkerClick}
               />
             );

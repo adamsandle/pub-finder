@@ -29,7 +29,7 @@ const getRings = distance => {
   let results = [];
   let interval;
   let x = 0;
-  if (distance < 250) {
+  if (distance <= 250) {
     interval = 50;
   } else if (distance < 500) {
     interval = 100;
@@ -39,6 +39,8 @@ const getRings = distance => {
     interval = 500;
   } else if (distance < 10000) {
     interval = 1000;
+  } else if (distance < 1000000) {
+    interval = 100000;
   } else {
     interval = 10000;
   }
