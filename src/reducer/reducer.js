@@ -49,22 +49,24 @@ export default (state = initialSate, action) => {
         fetching: false
       };
     case "FETCH_LOCATIONS":
+      const locations = state.locations;
+      action.payload.data.elements.forEach(item => {
+        const itemExists = locations.find(x => x.id === item.id) != null;
+        if (!itemExists) {
+          locations.push({
+            id: item.id,
+            name: item.tags.name,
+            lat: item.center ? item.center.lat : item.lat,
+            lon: item.center ? item.center.lon : item.lon
+          });
+        }
+      });
+
       return {
         ...state,
         fetchedPosition: action.fetchedPosition,
         fetching: false,
-        locations: calculateDistance(
-          action.payload.data.elements.map(x => {
-            return {
-              id: x.id,
-              name: x.tags.name,
-              lat: x.center ? x.center.lat : x.lat,
-              lon: x.center ? x.center.lon : x.lon
-            };
-          }),
-          state.position,
-          state.heading
-        )
+        locations: calculateDistance(locations, state.position, state.heading)
       };
     case "UPDATE_HEADING":
       return {
